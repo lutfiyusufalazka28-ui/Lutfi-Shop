@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lutfi Shop - Toko Online Terpercaya</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #ec4899;
+            --dark-color: #1f2937;
+            --light-bg: #f9fafb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-color);
+        }
+
+        /* Header Styles */
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .search-box {
+            position: relative;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .search-box input {
+            border-radius: 25px;
+            padding: 0.5rem 3rem 0.5rem 1.5rem;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .search-box button {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .search-box button:hover {
+            background: var(--secondary-color);
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--dark-color);
+            transition: color 0.3s;
+        }
+
+        .cart-icon:hover {
+            color: var(--primary-color);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 4rem 0;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Category Pills */
+        .category-pills {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) #f1f1f1;
+        }
+
+        .category-pills::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .category-pills::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .category-pills::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 10px;
+        }
+
+        .category-pill {
+            padding: 0.5rem 1.5rem;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        .category-pill:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        }
+
+        .category-pill.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Product Cards */
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .product-image {
+            position: relative;
+            overflow: hidden;
+            height: 250px;
+            background: #f3f4f6;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.1);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--accent-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+
+        .product-price {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .product-price .original-price {
+            text-decoration: line-through;
+            color: #9ca3af;
+            font-size: 0.9rem;
+            margin-left: 0.5rem;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: auto;
+        }
+
+        .btn-wa {
+            flex: 1;
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-wa:hover {
+            background: #20b358;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-cart {
+            background: var(--light-bg);
+            color: var(--dark-color);
+            border: 2px solid #e5e7eb;
+            padding: 0.75rem;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .btn-cart:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Cart Sidebar */
+        .cart-sidebar {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            transition: right 0.3s;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-sidebar.active {
+            right: 0;
+        }
+
+        .cart-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-items {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .cart-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .cart-item-info {
+            flex-grow: 1;
+        }
+
+        .cart-footer {
+            padding: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 1000;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-color);
+            color: white;
+            padding: 3rem 0 1rem;
+            margin-top: 5rem;
+        }
+
+        .footer-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .cart-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+            
+            .hero-section {
+                padding: 2rem 0;
+            }
+            
+            .product-image {
+                height: 200px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Toast Notification */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+
+        .custom-toast {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast-success {
+            border-left: 4px solid #10b981;
+        }
+
+        .toast-error {
+            border-left: 4px solid #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-shop"></i> Lutfi Shop
+            </a>
+            
+            <div class="search-box d-none d-md-flex">
+                <input type="text" class="form-control" placeholder="Cari produk..." id="searchInput">
+                <button type="button" onclick="searchProducts()">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+            
+            <div class="d-flex align-items-center gap-3">
+                <div class="cart-icon" onclick="toggleCart()">
+                    <i class="bi bi-cart3"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+                <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <i class="bi bi-list"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Search -->
+    <div class="container d-md-none mt-3">
+        <div class="search-box">
+            <input type="text" class="form-control" placeholder="Cari produk..." id="searchInputMobile">
+            <button type="button" onclick="searchProducts()">
+                <i class="bi bi-search"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="hero-content">
+                        <h1 class="display-4 fw-bold mb-4">Selamat Datang di Lutfi Shop</h1>
+                        <p class="lead mb-4">Temukan berbagai produk berkualitas dengan harga terbaik!</p>
+                        <div class="d-flex gap-3 flex-wrap">
+                            <button class="btn btn-light btn-lg" onclick="scrollToProducts()">
+                                <i class="bi bi-bag"></i> Belanja Sekarang
+                            </button>
+                            <a href="https://wa.me/6288985628174" class="btn btn-outline-light btn-lg" target="_blank">
+                                <i class="bi bi-whatsapp"></i> Hubungi Kami
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <img src="https://picsum.photos/seed/hero/600/400" alt="Hero" class="img-fluid rounded-4 shadow-lg">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <div class="container">
+        <div class="category-pills" id="categoryPills">
+            <div class="category-pill active" onclick="filterCategory('all')">Semua Produk</div>
+            <div class="category-pill" onclick
+            ="filterCategory('buku')">Buku</div>
+            <div class="category-pill" onclick
+            ="filterCategory('aplikasi')">Aplikasi</div>
+            <div class="category-pill" onclick="filterCategory('game')">Game</div>
+            <div class="category-pill" onclick="filterCategory('shaders')">Shaders</div>
+            <div class="category-pill" onclick="filterCategory('addon')">Addon</div>
+            <div class="category-pill" onclick="filterCategory('texture-pack')">Texture pack</div>
+        </div>
+    </div>
+
+    <!-- Products Section -->
+    <section class="container mb-5" id="productsSection">
+        <h2 class="mb-4">Produk Terbaru</h2>
+        <div class="row g-4" id="productsGrid">
+            <!-- Products will be loaded here -->
+        </div>
+    </section>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h4 class="mb-0">Keranjang Belanja</h4>
+            <button class="btn-close" onclick="toggleCart()"></button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <p class="text-center text-muted py-5">Keranjang masih kosong</p>
+        </div>
+        <div class="cart-footer">
+            <div class="d-flex justify-content-between mb-3">
+                <h5>Total:</h5>
+                <h5 id="cartTotal">Rp 0</h5>
+            </div>
+            <button class="btn btn-success w-100" onclick="checkoutViaWA()">
+                <i class="bi bi-whatsapp"></i> Checkout via WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay" onclick="toggleCart()"></div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5 class="mb-3">Lutfi Shop</h5>
+                    <p>Toko online terpercaya dengan berbagai produk berkualitas!</p>
+                    <div class="d-flex gap-3 mt-3">
+                        <a href="https://wa.me/6288985628174" class="text-white" target="_blank">
+                            <i class="bi bi-whatsapp fs-4"></i>
+                        </a>
+                        <a href="#" class="text-white">
+                            <i class="bi bi-instagram fs-4"></i>
+                        </a>
+                        <a href="#" class="text-white">
+                            <i class="bi bi-facebook fs-4"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5 class="mb-3">Layanan</h5>
+                    <div class="footer-links d-flex flex-column gap-2">
+                        <a href="#">Cara Pemesanan</a>
+                        <a href="#">Pengiriman</a>
+                        <a href="#">Pembayaran</a>
+                        <a href="#">Kebijakan Pengembalian</a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5 class="mb-3">Kontak</h5>
+                    <p><i class="bi bi-whatsapp"></i> +62 889-8562-8174</p>
+                    <p><i class="bi bi-envelope"></i> info lutfiyusufalazka@gmail.com</p>
+                    <p><i class="bi bi-geo-alt"></i> Pemalang, Indonesia</p>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2024 Lutfi Shop. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Product data
+        const products = [
+            {
+                id: 1,
+                name: "Minecraft Original",
+                price: 15000,
+                originalPrice: 20000,
+                category: "game",
+                image: "https://files.catbox.moe/dv0clw.jpg",
+                badge: "Best Seller"
+            },
+            {
+                id: 2,
+                name: "Action And Stuff",
+                price: 7000,
+                category: "addon",
+                image: "https://files.catbox.moe/lojlu8.jpg",
+                badge: "Best Seller"
+            },
+            {
+                id: 3,
+                name: "Runarok Shaders",
+                price: 10000,
+                category: "shaders",
+                image: "https://files.catbox.moe/hn9zm5.jpg"
+            },
+            {
+                id: 4,
+                name: "Novafx Shaders",
+                price: 6000,
+                originalPrice: 10000,
+                category: "shaders",
+                image: "https://files.catbox.moe/0yp6gv.png",
+                badge: "Best Seller%"
+            },
+            {
+                id: 5,
+                name: "Prime,s HD Texture",
+                price: 7000,
+                category: "texture-pack",
+                image: "https://files.catbox.moe/nkzqu2.jpg"
+            },
+            {
+                id: 6,
+                name: "Pdf Buku Mina No Nihongo l Edisi 2",
+                price: 15000,
+                category: "buku",
+                image: "https://files.catbox.moe/n8qp1d.jpg",
+                badge: "cocok buat pemula belajar bahasa jepang"
+            },
+            {
+                id: 7,
+                name: "Pdf Buku Mina No Nihongo ll Edisi 2",
+                price: 17000,
+                category: "buku",
+                image: "https://files.catbox.moe/63sa2k.jpg"
+            },
+            {
+                id: 8,
+                name: "Pixellab Premium",
+                price: 10000,
+                category: "aplikasi",
+                image: "https://files.catbox.moe/t9918j.png",
+                badge: "New"
+            },
+            {
+                id: 9,
+                name: "Pixellab Gold Premium",
+                price: 10000,
+                category: "aplikasi",
+                image: "https://files.catbox.moe/10ru0n.jpeg",
+                badge: "New"
+            },
+            {
+                id: 10,
+                name: "Alight motion Premium",
+                price: 10000,
+                category: "aplikasi",
+                image: "https://files.catbox.moe/k0rj5i.jpeg",
+                badge: "New"
+            }
+        ];
+
+        // Cart state
+        let cart = [];
+        let currentCategory = 'all';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderProducts();
+            updateCartCount();
+        });
+
+        // Render products
+        function renderProducts() {
+            const productsGrid = document.getElementById('productsGrid');
+            const filteredProducts = currentCategory === 'all' 
+                ? products 
+                : products.filter(p => p.category === currentCategory);
+            
+            productsGrid.innerHTML = filteredProducts.map(product => `
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="${product.image}" alt="${product.name}">
+                            ${product.badge ? `<span class="product-badge">${product.badge}</span>` : ''}
+                        </div>
+                        <div class="product-info">
+                            <h5 class="product-name">${product.name}</h5>
+                            <div class="product-price">
+                                Rp ${product.price.toLocaleString('id-ID')}
+                                ${product.originalPrice ? `<span class="original-price">Rp ${product.originalPrice.toLocaleString('id-ID')}</span>` : ''}
+                            </div>
+                            <div class="product-actions">
+                                <button class="btn-wa" onclick="orderViaWA(${product.id})">
+                                    <i class="bi bi-whatsapp"></i> Beli
+                                </button>
+                                <button class="btn-cart" onclick="addToCart(${product.id})">
+                                    <i class="bi bi-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter by category
+        function filterCategory(category) {
+            currentCategory = category;
+            
+            // Update active pill
+            document.querySelectorAll('.category-pill').forEach(pill => {
+                pill.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            renderProducts();
+        }
+
+        // Search products
+        function searchProducts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase() || 
+                              document.getElementById('searchInputMobile').value.toLowerCase();
+            
+            if (!searchTerm) {
+                renderProducts();
+                return;
+            }
+            
+            const filteredProducts = products.filter(product => 
+                product.name.toLowerCase().includes(searchTerm)
+            );
+            
+            const productsGrid = document.getElementById('productsGrid');
+            if (filteredProducts.length === 0) {
+                productsGrid.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="bi bi-search fs-1 text-muted"></i>
+                        <p class="mt-3 text-muted">Produk tidak ditemukan</p>
+                    </div>
+                `;
+            } else {
+                productsGrid.innerHTML = filteredProducts.map(product => `
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <div class="product-card">
+                            <div class="product-image">
+                                <img src="${product.image}" alt="${product.name}">
+                                ${product.badge ? `<span class="product-badge">${product.badge}</span>` : ''}
+                            </div>
+                            <div class="product-info">
+                                <h5 class="product-name">${product.name}</h5>
+                                <div class="product-price">
+                                    Rp ${product.price.toLocaleString('id-ID')}
+                                    ${product.originalPrice ? `<span class="original-price">Rp ${product.originalPrice.toLocaleString('id-ID')}</span>` : ''}
+                                </div>
+                                <div class="product-actions">
+                                    <button class="btn-wa" onclick="orderViaWA(${product.id})">
+                                        <i class="bi bi-whatsapp"></i> Beli
+                                    </button>
+                                    <button class="btn-cart" onclick="addToCart(${product.id})">
+                                        <i class="bi bi-cart-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Add to cart
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+            
+            updateCartCount();
+            renderCart();
+            showToast('Produk ditambahkan ke keranjang', 'success');
+        }
+
+        // Update cart count
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cartCount').textContent = count;
+        }
+
+        // Toggle cart
+        function toggleCart() {
+            const cartSidebar = document.getElementById('cartSidebar');
+            const overlay = document.getElementById('overlay');
+            
+            cartSidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        // Render cart
+        function renderCart() {
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p class="text-center text-muted py-5">Keranjang masih kosong</p>';
+                cartTotal.textContent = 'Rp 0';
+                return;
+            }
+            
+            cartItems.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="cart-item-info">
+                        <h6>${item.name}</h6>
+                        <p class="mb-1">Rp ${item.price.toLocaleString('id-ID')}</p>
+                        <div class="d-flex align-items-center gap-2">
+                            <button class="btn btn-sm btn-outline-secondary" onclick="updateQuantity(${item.id}, -1)">-</button>
+                            <span>${item.quantity}</span>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="updateQuantity(${item.id}, 1)">+</button>
+                            <button class="btn btn-sm btn-outline-danger ms-auto" onclick="removeFromCart(${item.id})">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            cartTotal.textContent = `Rp ${total.toLocaleString('id-ID')}`;
+        }
+
+        // Update quantity
+        function updateQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    updateCartCount();
+                    renderCart();
+                }
+            }
+        }
+
+        // Remove from cart
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartCount();
+            renderCart();
+            showToast('Produk dihapus dari keranjang', 'error');
+        }
+
+        // Order via WhatsApp
+        function orderViaWA(productId) {
+            const product = products.find(p => p.id === productId);
+            const message = `Halo, saya ingin memesan produk:\n\nNama: ${product.name}\nHarga: Rp ${product.price.toLocaleString('id-ID')}\n\nMohon informasi lebih lanjut. Terima kasih.`;
+            const whatsappUrl = `https://wa.me/6288985628174?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Checkout via WhatsApp
+        function checkoutViaWA() {
+            if (cart.length === 0) {
+                showToast('Keranjang masih kosong', 'error');
+                return;
+            }
+            
+            let message = 'Halo, saya ingin memesan produk berikut:\n\n';
+            let total = 0;
+            
+            cart.forEach(item => {
+                const subtotal = item.price * item.quantity;
+                total += subtotal;
+                message += `${item.name} x ${item.quantity} = Rp ${subtotal.toLocaleString('id-ID')}\n`;
+            });
+            
+            message += `\nTotal: Rp ${total.toLocaleString('id-ID')}\n\nMohon informasi lebih lanjut. Terima kasih.`;
+            
+            const whatsappUrl = `https://wa.me/6288985628174?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            
+            // Clear cart after checkout
+            cart = [];
+            updateCartCount();
+            renderCart();
+            toggleCart();
+            showToast('Pesanan telah dikirim via WhatsApp', 'success');
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `custom-toast toast-${type}`;
+            toast.innerHTML = `
+                <i class="bi bi-${type === 'success' ? 'check-circle-fill' : 'exclamation-circle-fill'} fs-5"></i>
+                <span>${message}</span>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideIn 0.3s ease-out reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Scroll to products
+        function scrollToProducts() {
+            document.getElementById('productsSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Search on Enter key
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchProducts();
+            }
+        });
+
+        document.getElementById('searchInputMobile').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchProducts();
+            }
+        });
+    </script>
+</body>
+</html>
